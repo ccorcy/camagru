@@ -43,6 +43,7 @@
     <head>
         <meta charset="utf-8">
         <title>Camagru</title>
+        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
     </head>
     <header>
@@ -54,68 +55,77 @@
                 <?php is_log() ?>
             </div>
         </div>
-        <div class="main_frame">
             <center>
                 <video autoplay></video>
             </center>
-        </div>
-        <img src="">
-        <canvas style="display:none; width:350px; height:250px;"></canvas>
+        <hr>
+        <center><img src=""></center>
+        <canvas style="display:none"></canvas>
+        <input type="button" name="send" value="Send">
     </body>
     <footer>
 
     </footer>
     <script type="text/javascript">
+        var streaming = false,
+     video        = document.querySelector('video'),
+     canvas       = document.querySelector('canvas'),
+     photo        = document.querySelector('img'),
+     button       = document.querySelector('button'),
+     width = 640,
+     height = 0;
 
-    function hasGetUserMedia() {
-        return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia || navigator.msGetUserMedia);
+    navigator.getMedia = ( navigator.getUserMedia ||
+                        navigator.webkitGetUserMedia ||
+                        navigator.mozGetUserMedia ||
+                        navigator.msGetUserMedia);
+
+    navigator.getMedia(
+    {
+     video: true,
+     audio: false
+    },
+    function(stream) {
+     if (navigator.mozGetUserMedia) {
+       video.mozSrcObject = stream;
+     } else {
+       var vendorURL = window.URL || window.webkitURL;
+       video.src = vendorURL.createObjectURL(stream);
+     }
+     video.play();
+    },
+    function(err) {
+     console.log("An error occured! " + err);
+    }
+    );
+
+    video.addEventListener('canplay', function(ev){
+    if (!streaming) {
+     height = video.videoHeight / (video.videoWidth/width);
+     video.setAttribute('width', width);
+     video.setAttribute('height', height);
+     canvas.setAttribute('width', width);
+     canvas.setAttribute('height', height);
+     streaming = true;
+    }
+    }, false);
+
+    function takepicture() {
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+    var data = canvas.toDataURL('image/jpg');
+    photo.setAttribute('src', data);
     }
 
-    if (hasGetUserMedia()) {
-        var errorCallback = function(e) {
-          console.log('Reeeejected!', e);
-        };
-        navigator.getUserMedia({video: true, audio: true}, function(localMediaStream) {
-          var video = document.querySelector('video');
-          video.src = window.URL.createObjectURL(localMediaStream);
-          video.onloadedmetadata = function(e) {
-            // Ready to go. Do some stuff.
-          };
-        }, errorCallback);
+    video.addEventListener('click', function(ev){
+     takepicture();
+    ev.preventDefault();
+    }, false);
+    button.addEventListener('click', function(ev){
+     takepicture();
+    ev.preventDefault();
+    }, false);
 
-        var video = document.querySelector('video');
-        var canvas = document.querySelector('canvas');
-        var ctx = canvas.getContext('2d');
-        var localMediaStream = null;
-
-        function snapshot() {
-            if (localMediaStream) {
-            ctx.drawImage(video, 0, 0);
-            document.querySelector('img').src = canvas.toDataURL('image/png');
-            }
-        }
-
-        video.addEventListener('click', snapshot, false);
-        navigator.getUserMedia({video: true}, function(stream) {
-        video.src = window.URL.createObjectURL(stream);
-        localMediaStream = stream;
-        }, errorCallback);
-
-        var idx = 0;
-        var filters = ['grayscale', 'sepia', 'blur', 'saturate', 'invert', ''];
-
-        function changeFilter(e) {
-          var el = e.target;
-          el.className = '';
-          var effect = filters[idx++ % filters.length]; // loop through filters.
-          if (effect) {
-            el.classList.add(effect);
-          }
-        }
-
-        document.querySelector('img').addEventListener(
-            'click', changeFilter, false);
-            }
     </script>
 </html>
