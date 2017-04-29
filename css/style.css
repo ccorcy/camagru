@@ -1,0 +1,23 @@
+
+header {
+    box-shadow: 2px 2px 5px black;
+    text-align: center;
+}
+
+body {
+    background: #517fa4;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #243949, #517fa4);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #243949, #517fa4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    font-size: 17px;
+    color: rgb(228, 171, 43);
+}
+
+
+
+.left-panel {
+    height: 100px;
+    width: 200px;
+    margin: 15px;
+    padding: 5px;
+    box-shadow: 2px 2px 5px black;
+}
