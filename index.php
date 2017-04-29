@@ -54,8 +54,68 @@
                 <?php is_log() ?>
             </div>
         </div>
+        <div class="main_frame">
+            <center>
+                <video autoplay></video>
+            </center>
+        </div>
+        <img src="">
+        <canvas style="display:none; width:350px; height:250px;"></canvas>
     </body>
     <footer>
 
     </footer>
+    <script type="text/javascript">
+
+    function hasGetUserMedia() {
+        return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia || navigator.msGetUserMedia);
+    }
+
+    if (hasGetUserMedia()) {
+        var errorCallback = function(e) {
+          console.log('Reeeejected!', e);
+        };
+        navigator.getUserMedia({video: true, audio: true}, function(localMediaStream) {
+          var video = document.querySelector('video');
+          video.src = window.URL.createObjectURL(localMediaStream);
+          video.onloadedmetadata = function(e) {
+            // Ready to go. Do some stuff.
+          };
+        }, errorCallback);
+
+        var video = document.querySelector('video');
+        var canvas = document.querySelector('canvas');
+        var ctx = canvas.getContext('2d');
+        var localMediaStream = null;
+
+        function snapshot() {
+            if (localMediaStream) {
+            ctx.drawImage(video, 0, 0);
+            document.querySelector('img').src = canvas.toDataURL('image/png');
+            }
+        }
+
+        video.addEventListener('click', snapshot, false);
+        navigator.getUserMedia({video: true}, function(stream) {
+        video.src = window.URL.createObjectURL(stream);
+        localMediaStream = stream;
+        }, errorCallback);
+
+        var idx = 0;
+        var filters = ['grayscale', 'sepia', 'blur', 'saturate', 'invert', ''];
+
+        function changeFilter(e) {
+          var el = e.target;
+          el.className = '';
+          var effect = filters[idx++ % filters.length]; // loop through filters.
+          if (effect) {
+            el.classList.add(effect);
+          }
+        }
+
+        document.querySelector('img').addEventListener(
+            'click', changeFilter, false);
+            }
+    </script>
 </html>
