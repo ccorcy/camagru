@@ -25,16 +25,33 @@
     function is_log() {
         if ($_SESSION['log_in'] !== "")
         {
-            echo "Bonjour " . $_SESSION['log_in']. " !<br />";
+            echo "<h2>Bonjour " . $_SESSION['log_in']. " !</h2><br />";
             echo "<a href='manage_account.php'>Manage account</a><br />";
             echo "<a href='logout.php'>Logout</a>";
         }
         else {
             echo '<form class="login" action="index.php" method="post"> <label for="username">Username: </label><input type="text" name="username" value="" placeholder="Username"><br>
-                <label for="password">Password: </label><input type="password" name="password" value="" placeholder="password">
-                <input type="submit" name="login" value="Login">
-            </form>
-            <a href="register.php">No account ? Register now</a>';
+                <label for="password">Password: </label><input type="password" name="password" value="" placeholder="password"><br />
+                <input id="login" type="submit" name="login" value="Login"><br />
+                <a href="register.php">No account ? Register now</a>
+            </form>'
+            ;
+        }
+    }
+
+    function display_save() {
+        if ($_SESSION['log_in'] !== "")
+        {
+            echo '<div style="display:none" id="send-container">
+                    <form action="save_pictures.php" method="post">
+                        <input id="pic" type="text" name="pic" style="display:none" value=""/>
+                        <input name="user" type="text" style="display:none" value="'.$_SESSION['log_in'].'">
+                        <button id="login" style="display:none" type="submit" name="button">SAVE PICTURE</button>
+                    </form>
+                </div>';
+        }
+        else {
+            echo "You must be logged to save your pictures.";
         }
     }
 ?>
@@ -47,7 +64,11 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <header>
-        <h1>Camagru</h1>
+    <div class="header">
+        <h1><a href="index.php">Camagru</a></h1>
+        <a href="mypics.php" style="margin-left: 15px;;">My pictures</a>
+        <a href="gallery.php" style="margin-right: 15px;;">Gallery</a>
+    </div>
     </header>
     <body>
         <div class="left-panel">
@@ -60,20 +81,24 @@
             </center>
         <hr>
         <center><img src=""></center>
-        <canvas style="display:none"></canvas>
-        <input type="button" name="send" value="Send">
+        <canvas style="display:none"></canvas><br>
+        <?php display_save() ?>
     </body>
     <footer>
 
     </footer>
     <script type="text/javascript">
-        var streaming = false,
-     video        = document.querySelector('video'),
-     canvas       = document.querySelector('canvas'),
-     photo        = document.querySelector('img'),
-     button       = document.querySelector('button'),
-     width = 640,
-     height = 0;
+    var     streaming = false,
+            video        = document.querySelector('video'),
+            canvas       = document.querySelector('canvas'),
+            photo        = document.querySelector('img'),
+            button       = document.querySelector('button'),
+            pic_input    = document.querySelector('#pic');
+            width = 640,
+            height = 0;
+
+
+    var xhr = new XMLHttpRequest();
 
     navigator.getMedia = ( navigator.getUserMedia ||
                         navigator.webkitGetUserMedia ||
@@ -110,19 +135,22 @@
     }
     }, false);
 
+    function clickSendDiv() {
+        document.querySelector('#save_button').click;
+    }
+
     function takepicture() {
-    canvas.width = width;
-    canvas.height = height;
-    canvas.getContext('2d').drawImage(video, 0, 0, width, height);
-    var data = canvas.toDataURL('image/jpg');
-    photo.setAttribute('src', data);
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+        var data = canvas.toDataURL('image/jpg');
+        photo.setAttribute('src', data);
+        document.querySelector('#login').style.display = "inline";
+        document.querySelector('#send-container').style.display = "inline";
+        pic_input.value = data;
     }
 
     video.addEventListener('click', function(ev){
-     takepicture();
-    ev.preventDefault();
-    }, false);
-    button.addEventListener('click', function(ev){
      takepicture();
     ev.preventDefault();
     }, false);

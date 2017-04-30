@@ -1,20 +1,40 @@
 header {
-    box-shadow: 2px 2px 5px black;
-    text-align: center;
+
+}
+
+h1 {
+    font-size: 6vw;
+
 }
 
 body {
-    background: #517fa4;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #243949, #517fa4);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #243949, #517fa4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #c21500;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #ffc500, #c21500);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ffc500, #c21500); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     font-size: 17px;
     color: rgb(228, 171, 43);
     font-family: 'Lobster', cursive;
 }
 
+video {
+    border-radius: 10px 10px 10px 10px;
+}
+
+a {
+ font-style: normal;
+ text-decoration: none;
+}
+
+a:hover {
+ color: rgb(105, 0, 255);
+}
+
+.header {
+}
+
 .left-panel {
-    float:right;
-    height: 100px;
+    float:left;
+    height: 270px;
     width: 200px;
     padding: 5px;
     box-shadow: 2px 2px 5px black;
@@ -22,4 +42,46 @@ background: linear-gradient(to right, #243949, #517fa4); /* W3C, IE 10+/ Edge, F
 
 .main_frame {
 
+}
+
+.header {
+    text-align: center;
+}
+
+.container {
+    margin: 50px;
+}
+
+.gal-pics {
+    margin: 5px;
+}
+
+.image {
+   position: relative;
+}
+
+h2 {
+    color: rgb(80, 23, 144);
+}
+
+#login {
+
+}
+
+#save_button {
+    color: #517fa4;
+}
+
+#send-container {
+    background-color: rgb(228, 171, 43);
+    text-align: center;
+    margin: 50px;
+    padding: 10px;
+    background-color: rgb(228, 171, 43);
+    border-radius: 5px 5px 5px 5px;
+}
+
+#send-container:hover {
+    background-color: #517fa4;
+    color: rgb(228, 171, 43);
 }

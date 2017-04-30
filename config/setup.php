@@ -12,7 +12,10 @@
     );');
     $create_img = $db->prepare('CREATE TABLE `img` (
         `id` int AUTO_INCREMENT NOT NULL,
-        `picture` varchar(8) NOT NULL,
+        `picture` LONGTEXT NOT NULL,
+        `vote` int,
+        `user` varchar(256) NOT NULL,
+        `commentaires` MEDIUMTEXT,
         PRIMARY KEY (`id`)
     );');
     $create_user->execute();
