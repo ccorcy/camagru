@@ -10,7 +10,7 @@ require("config/database.php");
     $result = $get_pics->fetchAll();
     foreach ($result as $row)
     {
-        echo "<img class='gal-pics' style='height:200px; width: 300px;' src='".$row['picture']."'/>";
+        echo "<img class='gal-pics' style='height:200px; width: 300px;' src='".$row['picture']."'/><h5>".$row['user']."</h5>";
     }
 }
 ?>

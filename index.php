@@ -80,7 +80,7 @@
             </p>";}
             else if ($_GET['success'] == 3) {
             echo "<p>
-                Picture saved !
+                Password correctly changed !
             </p>";
             }
         ?>

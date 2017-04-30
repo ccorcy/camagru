@@ -5,6 +5,7 @@
 
     $change_username = $db->prepare('UPDATE `user` SET `username` = :newusr WHERE `user`.`username` = :oldusr;');
     $change_password = $db->prepare('UPDATE `user` SET `password` = :newpsw WHERE `user`.`username` = :oldusr;');
+    $change_usr_of_pics = $db->prepare('UPDATE `img` SET `user` = :newusr WHERE `img`.`user` = :oldusr;');
 
     if ($_SESSION['log_in'] === "")
     {
@@ -14,7 +15,9 @@
     if ($_POST['sub_new_usr'] === 'Change' && $_POST['username'] !== ""
         && preg_match("/^([A-Za-z0-9]){4,15}$/", $_POST['username'])) {
         $change_username->execute(array(':newusr' => $_POST['username'],
-                                        'oldusr' => $_SESSION['log_in']));
+                                        ':oldusr' => $_SESSION['log_in']));
+        $change_usr_of_pics->execute(array(':newusr' => $_POST['username'],
+                                           ':oldusr' => $_SESSION['log_in']));
         $_SESSION['log_in'] = $_POST['username'];
         header("Location: index.php?success=1");
     }

@@ -39,21 +39,34 @@
 <html>
     <head>
         <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/form.css">
+        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
         <meta charset="utf-8">
         <title>Register / Camagru</title>
     </head>
+    <header>
+    <div class="header">
+        <h1><a href="index.php">Camagru</a></h1>
+        <a id="mypic" href="mypics.php" style="margin-left: 15px;;">My pictures</a>
+        <a id="gal" href="gallery.php" style="margin-right: 15px;;">Gallery</a>
+    </div>
+    </header>
     <body>
-        <div class="block register">
-            <form action="register.php" method="post">
-                <label for="username">Username: </label><input type="text" name="username" value="" placeholder="Username"><br>
-                <label for="mail">E-Mail address: </label><input type="<strong>email</strong>" name="mail" value="" placeholder="yourmail@xxx.xxx"><br>
-                <label for="password">Password: </label><input type="password" name="password" value=""><br>
-                <label for="vpassword">Verify Password: </label><input type="password" name="vpassword" value=""><br>
-                <input type="submit" name="Register" value="Register">
+        <div class="cont">
+            <form class="form-container" action="register.php" method="post">
+                <div class="form-title"><h2>Register</h2></div>
+                    <div class="form-title">Username</div>
+                    <input class="form-field" type="text" name="username" /><br />
+                    <div class="form-title">Email</div>
+                    <input class="form-field" type="text" name="mail" /><br />
+                    <div class="form-title">Password</div>
+                    <input class="form-field" type="password" name="password" /><br />
+                    <div class="form-title">Verify password</div>
+                    <input class="form-field" type="password" name="vpassword" /><br />
+                    <div class="submit-container">
+                        <input class="submit-button" type="submit" value="Register" />
+                    </div>
             </form>
         </div>
     </body>
-    <footer>
-        <a href="index.php">Back to main page</a>
-    </footer>
 </html>
