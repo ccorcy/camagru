@@ -1,5 +1,6 @@
 <?php
 require("config/database.php");
+session_start();
 
 $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
 function display_pics(){

@@ -42,11 +42,10 @@
     function display_save() {
         if ($_SESSION['log_in'] !== "")
         {
-            echo '<div style="display:none" id="send-container">
-                    <form action="save_pictures.php" method="post">
+            echo '<div id="send-container">
+                    <form id="myform" action="save_pictures.php" method="post">
                         <input id="pic" type="text" name="pic" style="display:none" value=""/>
-                        <input name="user" type="text" style="display:none" value="'.$_SESSION['log_in'].'">
-                        <button id="login" style="display:none" type="submit" name="button">SAVE PICTURE</button>
+                        <a href="javascript:{}" id="login" style="display:none" class="myButton" onclick="document.getElementById(`myform`).submit(); return false;">SAVE</a>
                     </form>
                 </div>';
         }
@@ -66,19 +65,45 @@
     <header>
     <div class="header">
         <h1><a href="index.php">Camagru</a></h1>
-        <a href="mypics.php" style="margin-left: 15px;;">My pictures</a>
-        <a href="gallery.php" style="margin-right: 15px;;">Gallery</a>
+        <a id="mypic" href="mypics.php" style="margin-left: 15px;;">My pictures</a>
+        <a id="gal" href="gallery.php" style="margin-right: 15px;;">Gallery</a>
     </div>
     </header>
     <body>
-        <div class="left-panel">
-            <div class="block">
-                <?php is_log() ?>
+        <?php if ($_GET['success'] == 1) {
+        echo "<p>
+            Username correctly changed !
+            </p>";}
+            else if ($_GET['success'] == 2) {
+            echo "<p>
+                Password correctly changed !
+            </p>";}
+            else if ($_GET['success'] == 3) {
+            echo "<p>
+                Picture saved !
+            </p>";
+            }
+        ?>
+        <center>
+        <div style="width: 1100px;">
+            <div class="left-panel">
+                <div class="block">
+                    <?php is_log() ?>
+                </div>
             </div>
+            <div class="right-panel">
+                <div class="block">
+                    <h2>Instructions</h2>
+                    <p>Click on the camera to take a picture !</p>
+                    <p>You must be logged to save your picture</p>
+                </div>
+            </div>
+                <center>
+                    <video autoplay></video>
+                </center>
+
         </div>
-            <center>
-                <video autoplay></video>
-            </center>
+        </center>
         <hr>
         <center><img src=""></center>
         <canvas style="display:none"></canvas><br>
@@ -134,10 +159,6 @@
      streaming = true;
     }
     }, false);
-
-    function clickSendDiv() {
-        document.querySelector('#save_button').click;
-    }
 
     function takepicture() {
         canvas.width = width;
