@@ -57,6 +57,16 @@
                     <input type="submit" name="sub_new_psw" value="Change">
                 </form>
             </div>
+            <div style="text-align: right" class="block">
+                <a class="myButton" onclick='sure()'>DELETE ACCOUNT</a>
+            </div>
         </div>
     </body>
+    <script type="text/javascript">
+        function sure(){
+            if (window.confirm("Are you sure that you want to delete your account ? Every pictures will be erased !") === true) {
+                window.location.replace("delete_account.php");
+        }
+        }
+    </script>
 </html>
