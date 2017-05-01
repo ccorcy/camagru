@@ -7,26 +7,46 @@ h1 {
 
 }
 
+img {
+    width: 40%;
+    box-shadow: 2px 2px 15px black;
+}
+
 body {
-    background: #c21500;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #ffc500, #c21500);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #ffc500, #c21500); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #abbaab;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #ffffff, #abbaab);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ffffff, #abbaab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
     font-size: 17px;
     color: rgb(244, 47, 21);
     font-family: 'Lobster', cursive;
 }
 
 video {
-    border-radius: 10px 10px 10px 10px;
     box-shadow: 2px 2px 15px black;
     transform: rotateY(180deg);
     -webkit-transform:rotateY(180deg); /* Safari and Chrome */
     -moz-transform:rotateY(180deg); /* Firefox */
+    height: 100%;
 }
 
 a {
  font-style: normal;
  text-decoration: none;
+}
+
+.btn {
+
+}
+
+.btn:hover {
+  background: #fae719;
+  background-image: -webkit-linear-gradient(top, #fae719, #b33329);
+  background-image: -moz-linear-gradient(top, #fae719, #b33329);
+  background-image: -ms-linear-gradient(top, #fae719, #b33329);
+  background-image: -o-linear-gradient(top, #fae719, #b33329);
+  background-image: linear-gradient(to bottom, #fae719, #b33329);
+  text-decoration: none;
 }
 
 a:hover {
@@ -38,16 +58,18 @@ a:hover {
 
 .left-panel {
     float:left;
-    height: 270px;
-    width: 200px;
+    height: 100%;
+    width: 30%;
+    max-width: 400px;
     padding: 5px;
     box-shadow: 2px 2px 15px black;
 }
 
 .right-panel {
     float:right;
-    height: 270px;
-    width: 200px;
+    height: 100%;
+    width: 15%;
+    max-width: 400px;
     padding: 5px;
     color: rgb(228, 182, 42);
     box-shadow: 2px 2px 15px black;
@@ -57,8 +79,9 @@ a:hover {
     border-radius: 5px 2px 5px 2px;
 }
 
-.main_frame {
-
+.main-frame {
+    width: 80%;
+    min-width: 1100px;
 }
 
 .header {
@@ -69,9 +92,7 @@ a:hover {
     margin: 50px;
 }
 
-.gal-pics {
-    margin: 5px;
-}
+
 
 .image {
    position: relative;
@@ -111,29 +132,24 @@ h2 {
 }
 
 .myButton {
-	-moz-box-shadow:inset 0px 0px 0px 0px #f5978e;
-	-webkit-box-shadow:inset 0px 0px 0px 0px #f5978e;
-	box-shadow:inset 0px 0px 0px 0px #f5978e;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f24537), color-stop(1, #c62d1f));
-	background:-moz-linear-gradient(top, #f24537 5%, #c62d1f 100%);
-	background:-webkit-linear-gradient(top, #f24537 5%, #c62d1f 100%);
-	background:-o-linear-gradient(top, #f24537 5%, #c62d1f 100%);
-	background:-ms-linear-gradient(top, #f24537 5%, #c62d1f 100%);
-	background:linear-gradient(to bottom, #f24537 5%, #c62d1f 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f24537', endColorstr='#c62d1f',GradientType=0);
-	background-color:#f24537;
-	-moz-border-radius:13px;
-	-webkit-border-radius:13px;
-	border-radius:13px;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:16px;
-	font-weight:bold;
-	padding:11px 76px;
-	text-decoration:none;
-	text-shadow:0px 0px 0px #810e05;
+    background: #fae719;
+      background-image: -webkit-linear-gradient(top, #fae719, #b8342b);
+      background-image: -moz-linear-gradient(top, #fae719, #b8342b);
+      background-image: -ms-linear-gradient(top, #fae719, #b8342b);
+      background-image: -o-linear-gradient(top, #fae719, #b8342b);
+      background-image: linear-gradient(to bottom, #fae719, #b8342b);
+      -webkit-border-radius: 6;
+      -moz-border-radius: 6;
+      border-radius: 6px;
+      -webkit-box-shadow: 3px 6px 12px #666666;
+      -moz-box-shadow: 3px 6px 12px #666666;
+      box-shadow: 3px 6px 12px #666666;
+      font-family: Arial;
+      color: #000000;
+      font-size: 20px;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+
 }
 .myButton:hover {
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #c62d1f), color-stop(1, #f24537));
@@ -148,4 +164,27 @@ h2 {
 .myButton:active {
 	position:relative;
 	top:1px;
+}
+div.gallery {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 180px;
+}
+
+div.gallery:hover {
+    border: 1px solid #777;
+}
+
+div.gallery img {
+    width: 100%;
+    height: auto;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+}
+.gal-pics {
+
 }

@@ -1,6 +1,5 @@
 <?php
     include("config/database.php");
-
     $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
     $insert_user = $db->prepare('INSERT INTO `user` (username, password, mail, confirmed) VALUES (:username, :password, :mail, :confirmed);');
     if ($_POST['Register'] == "Register")
@@ -25,10 +24,11 @@
             ------------------------
 
             Please click this link to activate your account:
-            http://www.localhost:8080/camagru/verify.php?mail='.$_POST['mail'].'&password='.$password.'
+            http://localhost:8080/camagru/verify.php?mail='.$_POST['mail'].'&password='.$password.'
             ';
             $headers = 'From:noreply@camagru.com' . "\r\n";
             mail($to, $subject, $message, $headers);
+            header("Location: login.php?success=1");
         }
         else {
             echo "<h3>Invalid username or password</h3>";
@@ -47,7 +47,6 @@
     <header>
     <div class="header">
         <h1><a href="index.php">Camagru</a></h1>
-        <a id="mypic" href="mypics.php" style="margin-left: 15px;;">My pictures</a>
         <a id="gal" href="gallery.php" style="margin-right: 15px;;">Gallery</a>
     </div>
     </header>
@@ -56,15 +55,15 @@
             <form class="form-container" action="register.php" method="post">
                 <div class="form-title"><h2>Register</h2></div>
                     <div class="form-title">Username</div>
-                    <input class="form-field" type="text" name="username" /><br />
+                    <input class="form-field" type="text" name="username" required/><br />
                     <div class="form-title">Email</div>
-                    <input class="form-field" type="text" name="mail" /><br />
+                    <input class="form-field" type="text" name="mail" required/><br />
                     <div class="form-title">Password</div>
-                    <input class="form-field" type="password" name="password" /><br />
+                    <input class="form-field" type="password" name="password" required/><br />
                     <div class="form-title">Verify password</div>
-                    <input class="form-field" type="password" name="vpassword" /><br />
+                    <input class="form-field" type="password" name="vpassword" required/><br />
                     <div class="submit-container">
-                        <input class="submit-button" type="submit" value="Register" />
+                        <input class="submit-button" type="submit" name="Register" value="Register" />
                     </div>
             </form>
         </div>

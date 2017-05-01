@@ -10,9 +10,6 @@
    background: -ms-linear-gradient(top, #f57f00, #ebc34c);
    background: -o-linear-gradient(top, #f57f00, #ebc34c);
    background-image: -ms-linear-gradient(top, #f57f00 0%, #ebc34c 100%);
-   -webkit-border-radius: 8px;
-   -moz-border-radius: 8px;
-   border-radius: 8px;
    -webkit-box-shadow: rgba(000,000,000,0.9) 0 1px 2px, inset rgba(255,255,255,0.4) 0 0px 0;
    -moz-box-shadow: rgba(000,000,000,0.9) 0 1px 2px, inset rgba(255,255,255,0.4) 0 0px 0;
    box-shadow: rgba(000,000,000,0.9) 0 1px 2px, inset rgba(255,255,255,0.4) 0 0px 0;
@@ -27,9 +24,6 @@
 .form-field {
    border: 1px solid #c9b7a2;
    background: #e4d5c3;
-   -webkit-border-radius: 4px;
-   -moz-border-radius: 4px;
-   border-radius: 4px;
    color: #c9b7a2;
    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(000,000,000,0.7) 0 0px 0px;
@@ -37,7 +31,8 @@
    padding:8px;
    margin-bottom:20px;
    width:280px;
-   }
+   font-size: 16px
+  }
 .form-field:focus {
    background: #fff;
    color: #725129;
@@ -56,7 +51,8 @@
    }
 .submit-container {
    margin:8px 0;
-   text-align:right;
+   text-align:center;
+   width: 100%;
    }
 .submit-button {
    border: 1px solid #e8cb0e;
@@ -80,6 +76,7 @@
    font-size: 14px;
    text-decoration: none;
    vertical-align: middle;
+   width: 95%;
    }
 .submit-button:hover {
    border: 1px solid #ffe436;

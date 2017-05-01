@@ -16,6 +16,7 @@
         `vote` int,
         `user` varchar(256) NOT NULL,
         `commentaires` MEDIUMTEXT,
+        `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (`id`)
     );');
     $create_user->execute();
