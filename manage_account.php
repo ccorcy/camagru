@@ -7,27 +7,36 @@
     $change_password = $db->prepare('UPDATE `user` SET `password` = :newpsw WHERE `user`.`username` = :oldusr;');
     $change_usr_of_pics = $db->prepare('UPDATE `img` SET `user` = :newusr WHERE `img`.`user` = :oldusr;');
 
-    if ($_SESSION['log_in'] === "")
+    $accounts = $db->prepare('SELECT `username` FROM `user` WHERE `username` = :user;');
+    $accounts->execute(array(':user' => $_POST['username']));
+    $res = $accounts->fetch(PDO::FETCH_ASSOC);
+    if ($res['username'] != "") {
+        header("Loction: index.php");
+    }
+
+    else if ($_SESSION['log_in'] === "")
     {
         header("Location: index.php");
     }
 
-    if ($_POST['sub_new_usr'] === 'Change' && $_POST['username'] !== ""
-        && preg_match("/^([A-Za-z0-9]){4,15}$/", $_POST['username'])) {
-        $change_username->execute(array(':newusr' => $_POST['username'],
-                                        ':oldusr' => $_SESSION['log_in']));
-        $change_usr_of_pics->execute(array(':newusr' => $_POST['username'],
-                                           ':oldusr' => $_SESSION['log_in']));
-        $_SESSION['log_in'] = $_POST['username'];
-        header("Location: index.php?success=1");
-    }
+    else {
+        if ($_POST['sub_new_usr'] === 'Change' && $_POST['username'] !== ""
+            && preg_match("/^([A-Za-z0-9]){4,15}$/", $_POST['username'])) {
+            $change_username->execute(array(':newusr' => $_POST['username'],
+                                            ':oldusr' => $_SESSION['log_in']));
+            $change_usr_of_pics->execute(array(':newusr' => $_POST['username'],
+                                               ':oldusr' => $_SESSION['log_in']));
+            $_SESSION['log_in'] = $_POST['username'];
+            header("Location: index.php?success=1");
+        }
 
-    if ($_POST['sub_new_psw'] === 'Change' && $_POST['password'] !== ""
-        && $_POST['password'] === $_POST['vpassword']
-            && preg_match("/^([A-Za-z0-9]){4,15}$/", $_POST['password'])) {
-        $change_password->execute(array(':newpsw' => hash("whirlpool", $_POST['password']),
-                                        ':oldusr' => $_SESSION['log_in']));
-        header("Location: index.php?success=2");
+        if ($_POST['sub_new_psw'] === 'Change' && $_POST['password'] !== ""
+            && $_POST['password'] === $_POST['vpassword']
+                && preg_match("/^([A-Za-z0-9]){4,15}$/", $_POST['password'])) {
+            $change_password->execute(array(':newpsw' => hash("whirlpool", $_POST['password']),
+                                            ':oldusr' => $_SESSION['log_in']));
+            header("Location: index.php?success=2");
+        }
     }
 ?>
 <!DOCTYPE html>
@@ -41,7 +50,6 @@
     <header>
     <div class="header">
         <h1><a href="index.php">Camagru</a></h1>
-        <a id="mypic" href="mypics.php" style="margin-left: 15px;;">My pictures</a>
         <a id="gal" href="gallery.php" style="margin-right: 15px;;">Gallery</a>
     </div>
     </header>

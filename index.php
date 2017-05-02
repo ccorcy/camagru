@@ -40,7 +40,7 @@
     function display_pics(){
         require("config/database.php");
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-        $get_pics = $db->prepare('SELECT * FROM `img` WHERE `user` = :user ORDER BY `date` DESC LIMIT 5;');
+        $get_pics = $db->prepare('SELECT * FROM `img` WHERE `user` = :user ORDER BY `date` DESC;');
         $get_pics->execute(array('user' => $_SESSION['log_in']));
         $result = $get_pics->fetchAll();
         foreach ($result as $row)
@@ -95,7 +95,7 @@
         </div><br /><br />
         </center>
         <div class="">
-            <div>
+            <div class="left-panel">
                 <div class="block">
                     <h2>Filtre</h2>
                     <p>Click on the camera to take a picture !</p>
@@ -106,14 +106,24 @@
                     </div>
                 </div>
             </div>
+            <div class="right-panel">
+                <div class="block">
+                    <label for="x">X position: </label><input id="x" type="number" name="x" value="150">
+                </div>
+                <div class="block">
+                    <label for="y">X position: </label><input id="y" type="number" name="y" value="150">
+                </div>
+                <div id="send-container">
+                        <form id="myform" action="save_pictures.php" method="post">
+                            <input id="pic" type="text" name="pic" style="display:none" value=""/>
+                            <input id="filter" type="text" name="filter" style="display:none;" value="">
+                            <a href="javascript:{}" id="login" <?php display_save() ?> class="myButton" onclick="document.getElementById(`myform`).submit(); return false;">SAVE</a>
+                        </form>
+                </div>
+            </div>
             <center><img id="picture" src="" style="display:none"></center>
             <canvas style="display:none"></canvas><br>
-            <div id="send-container">
-                    <form id="myform" action="save_pictures.php" method="post">
-                        <input id="pic" type="text" name="pic" style="display:none" value=""/>
-                        <a href="javascript:{}" id="login" <?php display_save() ?> class="myButton" onclick="document.getElementById(`myform`).submit(); return false;">SAVE</a>
-                    </form>
-            </div>
+            <canvas id="save" style="display:none"></canvas><br>
         </div>
 
     </body>
@@ -124,15 +134,22 @@
     var     streaming = false,
             video        = document.querySelector('video'),
             canvas       = document.querySelector('canvas'),
+            save         = document.querySelector('#save'),
             photo        = document.querySelector('#picture'),
             button       = document.querySelector('button'),
             pic_input    = document.querySelector('#pic'),
+            filter_input = document.querySelector('#filter'),
+            x = document.querySelector('#x'),
+            y = document.querySelector('#y'),
             width = 640,
             height = 0;
 
     var     ghost = document.querySelector('#ghost'),
             willface = document.querySelector('#willface'),
             glasses = document.querySelector('#glasses');
+
+
+    var     pics;
 
     document.querySelector('#login').style.display = "none";
     var xhr = new XMLHttpRequest();
@@ -168,14 +185,21 @@
      video.setAttribute('height', height);
      canvas.setAttribute('width', width);
      canvas.setAttribute('height', height);
+     save.setAttribute('width', width);
+     save.setAttribute('height', height);
      streaming = true;
     }
     }, false);
+
+    function getValue(v) {
+        return v.value;
+    }
 
     function takepicture() {
         canvas.width = width;
         canvas.height = height;
         canvas.getContext('2d').drawImage(video, 0, 0, width, height);
+        save.getContext('2d').drawImage(video, 0, 0, width, height);
         var data = canvas.toDataURL('image/jpg');
         photo.setAttribute('src', data);
         photo.style.display = "inline";
@@ -183,35 +207,36 @@
         document.querySelector('#send-container').style.display = "inline";
         document.querySelector('#login').style.display = "inline";
         pic_input.value = data;
+        canvas.getContext('2d').save();
     }
 
     willface.addEventListener('click', (ev) => {
-        canvas.getContext('2d').drawImage(willface, 235, 0);
+        canvas.getContext('2d').drawImage(save, 0, 0, width, height);
+        canvas.getContext('2d').drawImage(willface, getValue(x), getValue(y));
         var data = canvas.toDataURL('image/jpg');
         photo.setAttribute('src', data);
-        pic_input.value = data;
     ev.preventDefault();
     }, false);
 
     ghost.addEventListener('click', (ev) => {
-        canvas.getContext('2d').drawImage(ghost, 95, 26);
+        canvas.getContext('2d').drawImage(save, 0, 0, width, height);
+        canvas.getContext('2d').drawImage(ghost, getValue(x), getValue(y));
         var data = canvas.toDataURL('image/jpg');
         photo.setAttribute('src', data);
-        pic_input.value = data;
     ev.preventDefault();
     }, false);
 
     glasses.addEventListener('click', (ev) => {
-        canvas.getContext('2d').drawImage(glasses, 235, 25);
+        canvas.getContext('2d').drawImage(save, 0, 0, width, height);
+        canvas.getContext('2d').drawImage(glasses, getValue(x), getValue(y));
         var data = canvas.toDataURL('image/jpg');
         photo.setAttribute('src', data);
     ev.preventDefault();
     }, false);
 
-    video.addEventListener('click', function(ev){
+    video.addEventListener('click', (ev) => {
      takepicture();
     ev.preventDefault();
     }, false);
-
     </script>
 </html>

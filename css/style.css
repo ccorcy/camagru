@@ -68,8 +68,8 @@ a:hover {
 .right-panel {
     float:right;
     height: 100%;
-    width: 15%;
-    max-width: 400px;
+    width: 30%;
+    max-width: 600px;
     padding: 5px;
     color: rgb(228, 182, 42);
     box-shadow: 2px 2px 15px black;
@@ -123,12 +123,29 @@ h2 {
     border-radius: 5px 5px 5px 5px;
 }
 
+#com {
+    float: right;
+    margin-left: 50px;
+}
+
 .manage {
     border: 1px solid black;
 }
 
 .block {
     margin: 15px;
+}
+
+.comments {
+    width: 100%;
+    height: 100%;
+    box-shadow: 2px 2px 15px black;
+    padding: 5px;
+}
+
+.commentaires {
+    width: 60%;
+    padding: 15px;
 }
 
 .myButton {
@@ -165,6 +182,12 @@ h2 {
 	position:relative;
 	top:1px;
 }
+
+.user-comments {
+    margin: 5px;
+    font-size: 20px;
+}
+
 div.gallery {
     margin: 5px;
     border: 1px solid #ccc;

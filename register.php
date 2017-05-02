@@ -4,7 +4,14 @@
     $insert_user = $db->prepare('INSERT INTO `user` (username, password, mail, confirmed) VALUES (:username, :password, :mail, :confirmed);');
     if ($_POST['Register'] == "Register")
     {
-        if ($_POST['username'] !== "" && $_POST['password'] !== "" && $_POST['password'] === $_POST['vpassword'] && $_POST['mail'] !== ""
+        $accounts = $db->prepare('SELECT `username` FROM `user` WHERE `username` = :user;');
+        $accounts->execute(array(':user' => $_POST['username']));
+        $res = $accounts->fetch(PDO::FETCH_ASSOC);
+
+        if ($res['username'] === "") {
+            echo "Username not available";
+        }
+        else if ($_POST['username'] !== "" && $_POST['password'] !== "" && $_POST['password'] === $_POST['vpassword'] && $_POST['mail'] !== ""
             && preg_match("/^([A-Za-z0-9]){4,15}$/", $_POST['username']) && preg_match("/^([A-Za-z0-9]){4,15}$/", $_POST['password']))
         {
             $password = hash("whirlpool", $_POST['password']);

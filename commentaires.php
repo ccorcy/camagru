@@ -2,25 +2,7 @@
     include("config/database.php");
     session_start();
 
-    function display_coms(){
-        include("config/database.php");
-        $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-        $select_coms = $db->prepare('SELECT `commentaires` FROM `img` WHERE `img`.`id` = :id');
-        if ($_GET['id'] !== "") {
-            $select_coms->execute(array(':id' => $_GET['id']));
-            $result = $select_coms->fetch(PDO::FETCH_ASSOC);
-            if ($result['commentaires'] !== "") echo "Il n'y a aucun commentaire";
-            else {
-                    $coms = unserialize($result['commentaires']);
-                    foreach($coms as $c) {
-                        echo "user: ".$c['user']."  com: ".$c['commentaire'];
-                    }
-                }
-            }
-        }
-
-    if ($_POST['submit'] === "Submit comment" && $_POST['comment'] !== ""
-        && preg_match("/^([A-Za-z0-9]){0,150}$/", $_POST['comment']) && $_POST['id'] !== ""
+    if ($_POST['comment'] !== ""
          && $_SESSION['log_in'] !== "") {
         $n_com = array('user' => $_SESSION['log_in'], 'commentaire' => $_POST['comment']);
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
@@ -28,7 +10,7 @@
         $update_coms = $db->prepare('UPDATE `img` SET `commentaires` = :commentaires WHERE `img`.`id` = :id');
         $select_coms->execute(array(':id' => $_GET['id']));
         $result = $select_coms->fetch(PDO::FETCH_ASSOC);
-        $result = unserialize($result);
+        $result = unserialize($result['commentaires']);
         $result[] = $n_com;
         $update_coms->execute(array(':id' => $_POST['id'], ':commentaires' => serialize($result)));
     }
@@ -45,24 +27,84 @@
     <header>
     <div class="header">
         <h1><a href="index.php">Camagru</a></h1>
-        <a id="mypic" href="mypics.php" style="margin-left: 15px;;">My pictures</a>
-        <a id="gal" href="gallery.php" style="margin-right: 15px;;">Gallery</a>
+        <a id="gal" href="gallery.php" style="margin-right: 15px;">Gallery</a>
     </div>
     </header>
     <body>
-        <div class="commentaires">
-            <?php display_coms(); ?>
+        <div>
+            <div id="comment" class="commentaires" style="float:left;">
+
+            </div>
+            <div class="add_com">
+                <form id="com" class="form-container" style="float:left;" action=<?php echo '"commentaires.php?id='.$_GET['id'].'";' ?> method="post">
+                    <div class="form-title"><h2>Comment picture</h2></div>
+                        <div class="form-title">Your comments</div>
+                        <textarea class="form-field" name="comment" rows="8" cols="80" required></textarea><br />
+                        <input style="display:none;" type="text" name="id" value=<?php echo '"'.$_GET['id'].'"' ?>>
+                        <div class="submit-container">
+                            <input class="submit-button" type="submit" name="submit" value="Submit comment" />
+                        </div>
+                </form>
+            </div>
         </div>
-        <div class="add_com">
-            <form class="form-container" action="commentaires.php" method="post">
-                <div class="form-title"><h2>Comment</h2></div>
-                    <div class="form-title">Your comments</div>
-                    <input class="form-field" type="text" name="comment" maxlength="150" required/><br />
-                    <input style="display:none;" type="text" name="id" value=<?php echo '"'.$_GET['id'].'"' ?>>
-                    <div class="submit-container">
-                        <input class="submit-button" type="submit" name="submit" value="Submit comment" />
-                    </div>
-            </form>
-        </div>
+    <script type="text/javascript">
+        const com = document.querySelector('#com');
+        const xhr = new XMLHttpRequest();
+        const comments = document.querySelector('#comment');
+
+
+        com.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let form = new FormData(com);
+            xhr.open('POST', com.action, true);
+            xhr.onload = () => {
+                if (xhr.status === 200 && xhr.readyState === 4) {
+                    comments.innerHTML = "";
+                    xhr.open('GET', 'get_comms.php?id=' + <?php echo $_GET['id'] ?>, true);
+                    xhr.onload = () => {
+                        if (xhr.status === 200 && xhr.readyState === 4) {
+                            let com = JSON.parse(xhr.responseText);
+                            for (let i = 0; i < com.length; i++) {
+                                let e = document.createElement('div');
+                                let h2 = document.createElement('h2');
+                                let p = document.createElement('p');
+                                e.setAttribute('class', 'comments');
+                                h2.setAttribute('class', 'user-comments');
+                                h2.innerHTML = com[i].user;
+                                p.setAttribute('class', 'comm');
+                                p.innerHTML = com[i].commentaire;
+                                e.appendChild(h2);
+                                e.appendChild(p);
+                                comments.appendChild(e);
+                            }
+                        }
+                    }
+                    xhr.send();
+                }
+            }
+            xhr.send(form);
+        }, false);
+
+        xhr.open('GET', 'get_comms.php?id=' + <?php echo $_GET['id'] ?>, true);
+        xhr.onload = () => {
+            if (xhr.status === 200 && xhr.readyState === 4) {
+                let com = JSON.parse(xhr.responseText);
+                for (let i = 0; i < com.length; i++) {
+                    let e = document.createElement('div');
+                    let h2 = document.createElement('h2');
+                    let p = document.createElement('p');
+                    e.setAttribute('class', 'comments');
+                    h2.setAttribute('class', 'user-comments');
+                    h2.innerHTML = com[i].user;
+                    p.setAttribute('class', 'comm');
+                    p.innerHTML = com[i].commentaire;
+                    e.appendChild(h2);
+                    e.appendChild(p);
+                    comments.appendChild(e);
+                }
+            }
+        }
+        xhr.send();
+    </script>
     </body>
 </html>
