@@ -9,31 +9,11 @@
 
 
     function is_log() {
-        if ($_SESSION['log_in'] !== "")
+        if ($_SESSION['log_in'] != "")
         {
             echo "<h2>Bonjour " . $_SESSION['log_in']. " !</h2><br />";
             echo "<a href='manage_account.php'>Manage account</a><br />";
             echo "<a href='logout.php'>Logout</a>";
-        }
-        else {
-            echo '<form class="login" action="index.php" method="post"> <label for="username">Username: </label><input class="form-field"type="text" name="username" value="" placeholder="Username"><br>
-                <label for="password">Password: </label><input class="form-field" type="password" name="password" value="" placeholder="password"><br />
-                <div class="submit-container">
-                    <input class="submit-button" type="submit" name="login" value="Login" />
-                </div><br />
-                <a href="register.php">No account ? Register now</a>
-            </form>'
-            ;
-        }
-    }
-
-    function display_save() {
-        if ($_SESSION['log_in'] !== "")
-        {
-            echo 'display="inline"';
-        }
-        else {
-            echo 'display="none"';
         }
     }
 
@@ -117,7 +97,7 @@
                         <form id="myform" action="save_pictures.php" method="post">
                             <input id="pic" type="text" name="pic" style="display:none" value=""/>
                             <input id="filter" type="text" name="filter" style="display:none;" value="">
-                            <a href="javascript:{}" id="login" <?php display_save() ?> class="myButton" onclick="document.getElementById(`myform`).submit(); return false;">SAVE</a>
+                            <a href="javascript:{}" id="login" class="myButton" onclick="document.getElementById(`myform`).submit(); return false;">SAVE</a>
                         </form>
                 </div>
             </div>
