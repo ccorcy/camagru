@@ -108,10 +108,10 @@
             </div>
             <div class="right-panel">
                 <div class="block">
-                    <label for="x">X position: </label><input id="x" type="number" name="x" value="150">
+                    <label for="x">X position: </label><input id="x" type="range" name="x" value="150" min="-150" max="500">
                 </div>
                 <div class="block">
-                    <label for="y">X position: </label><input id="y" type="number" name="y" value="150">
+                    <label for="y">X position: </label><input id="y" type="range" name="y" value="150" min="-150" max="500">
                 </div>
                 <div id="send-container">
                         <form id="myform" action="save_pictures.php" method="post">
@@ -225,6 +225,9 @@
         photo.setAttribute('src', data);
     ev.preventDefault();
     }, false);
+
+    x.addEventListener('change', (ev) => { ev.preventDefault(); glasses.click();},false);
+    y.addEventListener('change', (ev) => { ev.preventDefault(); glasses.click();},false);
 
     glasses.addEventListener('click', (ev) => {
         canvas.getContext('2d').drawImage(save, 0, 0, width, height);
