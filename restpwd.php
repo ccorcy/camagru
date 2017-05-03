@@ -11,7 +11,7 @@
         return $randomString;
     }
 
-    if ($_POST['reset'] === "Reset" && $_POST['mail'] !== "") {
+    if ($_POST['reset'] === "Reset" && $_POST['mail'] != "") {
         $newpwd = generateRandomString(10);
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         $change_password = $db->prepare('UPDATE `user` SET `password` = :newpwd WHERE `user`.`mail` = :mail;');
@@ -25,7 +25,7 @@
         ';
         $headers = 'From:noreply@camagru.com' . "\r\n";
         mail($to, $subject, $message, $headers);
-        echo "mail send";
+        header("Location: login.php");
     }
 ?>
 <!DOCTYPE html>
@@ -41,7 +41,7 @@
             <form class="form-container" action="restpwd.php" method="post">
                 <div class="form-title"><h2>Reset password</h2></div>
                     <div class="form-title">Your email</div>
-                    <input class="form-field" type="text" name="email" required/><br />
+                    <input class="form-field" type="text" name="mail" required/><br />
                     <div class="submit-container">
                         <input class="submit-button" type="submit" name="reset" value="Reset" />
                     </div>

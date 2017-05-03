@@ -2,7 +2,7 @@
     include("config/database.php");
     session_start();
 
-    if ($_SESSION['log_in'] === ""){
+    if ($_SESSION['log_in'] == ""){
         header("Location: login.php");
     }
 
@@ -87,14 +87,14 @@
                 </div>
             </div>
             <div class="right-panel">
-                <div class="block">
-                    <label for="x">X position: </label><input id="x" type="range" name="x" value="150" min="-150" max="500">
-                </div>
-                <div class="block">
-                    <label for="y">X position: </label><input id="y" type="range" name="y" value="150" min="-150" max="500">
-                </div>
                 <div id="send-container">
                         <form id="myform" action="save_pictures.php" method="post">
+                            <div class="block">
+                                <label for="x">X position: </label><input id="x" type="range" name="x" value="150" min="-150" max="500">
+                            </div>
+                            <div class="block">
+                                <label for="y">Y position: </label><input id="y" type="range" name="y" value="150" min="-150" max="500">
+                            </div>
                             <input id="pic" type="text" name="pic" style="display:none" value=""/>
                             <input id="filter" type="text" name="filter" style="display:none;" value="">
                             <a href="javascript:{}" id="login" class="myButton" onclick="document.getElementById(`myform`).submit(); return false;">SAVE</a>
@@ -128,8 +128,8 @@
             willface = document.querySelector('#willface'),
             glasses = document.querySelector('#glasses');
 
-
-    var     pics;
+    var     filtre = [glasses, willface, ghost];
+    var     selected = -1;
 
     document.querySelector('#login').style.display = "none";
     var xhr = new XMLHttpRequest();
@@ -191,30 +191,36 @@
     }
 
     willface.addEventListener('click', (ev) => {
+        selected = 1;
         canvas.getContext('2d').drawImage(save, 0, 0, width, height);
         canvas.getContext('2d').drawImage(willface, getValue(x), getValue(y));
         var data = canvas.toDataURL('image/jpg');
+        filter.value = "filtre/willface.png";
         photo.setAttribute('src', data);
-    ev.preventDefault();
+        ev.preventDefault();
     }, false);
 
     ghost.addEventListener('click', (ev) => {
+        selected = 2;
         canvas.getContext('2d').drawImage(save, 0, 0, width, height);
         canvas.getContext('2d').drawImage(ghost, getValue(x), getValue(y));
         var data = canvas.toDataURL('image/jpg');
+        filter.value = "filtre/ghost.png";
         photo.setAttribute('src', data);
-    ev.preventDefault();
+        ev.preventDefault();
     }, false);
 
-    x.addEventListener('change', (ev) => { ev.preventDefault(); glasses.click();},false);
-    y.addEventListener('change', (ev) => { ev.preventDefault(); glasses.click();},false);
+    x.addEventListener('change', (ev) => { ev.preventDefault(); filtre[selected].click();},false);
+    y.addEventListener('change', (ev) => { ev.preventDefault(); filtre[selected].click();},false);
 
     glasses.addEventListener('click', (ev) => {
+        selected = 0;
         canvas.getContext('2d').drawImage(save, 0, 0, width, height);
         canvas.getContext('2d').drawImage(glasses, getValue(x), getValue(y));
         var data = canvas.toDataURL('image/jpg');
+        filter.value = "filtre/glasses.png";
         photo.setAttribute('src', data);
-    ev.preventDefault();
+        ev.preventDefault();
     }, false);
 
     video.addEventListener('click', (ev) => {
