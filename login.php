@@ -8,16 +8,18 @@
         <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
     </head>
     <body>
-        <form id="form" class="form-container" action="login.php" method="post">
-        <div class="form-title"><h2>Login</h2></div>
-            <label for="username">Username: </label><input class="form-field"type="text" name="username" value="" placeholder="Username"><br>
-            <label for="password">Password: </label><input class="form-field" type="password" name="password" value="" placeholder="password"><br />
-            <div class="submit-container">
-                <input class="submit-button" type="submit" name="login" value="Login" />
-            </div><br />
-            <span id="error"></span>
-            <a href="register.php">No account ? Register now</a>
-        </form>
+        <div class="login-container">
+            <form id="form" class="form-container" action="login.php" method="post">
+            <div class="form-title"><h2>Login</h2></div>
+                <label for="username">Username: </label><input class="form-field"type="text" name="username" value="" placeholder="Username"><br>
+                <label for="password">Password: </label><input class="form-field" type="password" name="password" value="" placeholder="password"><br />
+                <div class="submit-container">
+                    <input class="submit-button" type="submit" name="login" value="Login" />
+                </div><br />
+                <span id="error"></span>
+                <a href="register.php">No account ? Register now</a>
+            </form>
+        </div>
         <script type="text/javascript">
             const xhr = new XMLHttpRequest();
             const form = document.querySelector('#form');

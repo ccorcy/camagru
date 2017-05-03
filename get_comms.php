@@ -10,7 +10,6 @@
             $coms = unserialize($result['commentaires']);
             $tab = array();
             foreach($coms as $c) {
-                /*    echo "";*/
                 $tab[] = array("user" => $c['user'], "commentaire" => $c['commentaire']);
             }
             echo json_encode($tab);

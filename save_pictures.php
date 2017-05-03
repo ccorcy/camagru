@@ -2,7 +2,7 @@
     include("config/database.php");
     session_start();
 
-    if ($_SESSION['log_in'] === "" && $_POST['pic'] === "")
+    if ($_SESSION['log_in'] === "" || $_POST['pic'] === "" || $_POST['filter'] === "")
         header("Location: index.php?error=3");
     else {
         header("Location: index.php?success=3");
@@ -12,7 +12,6 @@
         $pictures = imagecreatefromstring(base64_decode($pic[1]));
         $detail = getimagesize($_POST['filter']);
         imagealphablending($pictures, true);
-        //imagealphablending($pictures, true);
         imagecopy($pictures, $filtre, $_POST['x'], $_POST['y'], 0, 0, $detail[0], $detail[1]);
         ob_start();
         imagepng($pictures);

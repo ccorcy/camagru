@@ -16,6 +16,7 @@
         `id` int AUTO_INCREMENT NOT NULL,
         `picture` LONGTEXT NOT NULL,
         `vote` int,
+        `user_vote` MEDIUMTEXT,
         `user` varchar(256) NOT NULL,
         `commentaires` MEDIUMTEXT,
         `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

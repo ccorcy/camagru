@@ -4,7 +4,7 @@
 
     if ($_POST['comment'] !== ""
          && $_SESSION['log_in'] !== "") {
-        $n_com = array('user' => $_SESSION['log_in'], 'commentaire' => $_POST['comment']);
+        $n_com = array('user' => $_SESSION['log_in'], 'commentaire' => htmlspecialchars($_POST['comment']));
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         $select_coms = $db->prepare('SELECT `commentaires` FROM `img` WHERE `img`.`id` = :id');
         $update_coms = $db->prepare('UPDATE `img` SET `commentaires` = :commentaires WHERE `img`.`id` = :id');

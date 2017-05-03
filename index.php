@@ -13,7 +13,6 @@
         {
             echo "<h2>Bonjour " . $_SESSION['log_in']. " !</h2><br />";
             echo "<a href='manage_account.php'>Manage account</a><br />";
-            echo "<a href='logout.php'>Logout</a>";
         }
     }
 
@@ -41,7 +40,8 @@
     <header>
     <div class="header">
         <h1><a href="index.php">Camagru</a></h1>
-        <a id="gal" href="gallery.php" style="margin-right: 15px;">Gallery</a>
+        <a href="gallery.php" style="margin-right: 15px;">Gallery</a>
+        <a href='logout.php'>Logout</a>
     </div>
     </header><hr>
     <body>
@@ -65,46 +65,46 @@
                     <?php is_log() ?>
                 </div>
             </div>
-            <div class="right-panel">
+            <div class="right-panel" style="overflow:auto;">
                 <?php display_pics() ?>
             </div>
-                <center>
-                    <video style="width: 40%" autoplay></video>
-                </center>
-
+            <video style="width: 30%" autoplay></video>
         </div><br /><br />
         </center>
-        <div class="">
-            <div class="left-panel">
-                <div class="block">
-                    <h2>Filtre</h2>
-                    <p>Click on the camera to take a picture !</p>
-                    <div class="filter">
-                        <img id="glasses" src="filtre/glasses.png" style="width:200px;height:128px;" alt="">
-                        <img id="willface" src="filtre/willface.png"style="width:200px;height:128px;" alt="" />
-                        <img id="ghost" src="filtre/ghost.png" style="width:200px;height:128px;" alt="">
+        <center>
+            <div class="main-frame">
+                <div class="left-panel">
+                    <div class="block">
+                        <h2>Filtre</h2>
+                        <p>Click on the camera to take a picture !</p>
+                        <div class="filter">
+                            <img id="glasses" src="filtre/glasses.png" style="width:200px;height:128px;" alt="">
+                            <img id="willface" src="filtre/willface.png"style="width:200px;height:128px;" alt="" />
+                            <img id="ghost" src="filtre/ghost.png" style="width:200px;height:128px;" alt="">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="right-panel">
-                <div id="send-container">
-                        <form id="myform" action="save_pictures.php" method="post">
-                            <div class="block">
-                                <label for="x">X position: </label><input id="x" type="range" name="x" value="150" min="-150" max="500">
-                            </div>
-                            <div class="block">
-                                <label for="y">Y position: </label><input id="y" type="range" name="y" value="150" min="-150" max="500">
-                            </div>
-                            <input id="pic" type="text" name="pic" style="display:none" value=""/>
-                            <input id="filter" type="text" name="filter" style="display:none;" value="">
-                            <a href="javascript:{}" id="login" class="myButton" onclick="document.getElementById(`myform`).submit(); return false;">SAVE</a>
-                        </form>
+                <div class="right-panel">
+                    <div id="send-container">
+                            <form id="myform" action="save_pictures.php" method="post">
+                                <div class="block">
+                                    <label for="x">X position: </label><input id="x" type="range" name="x" value="150" min="-150" max="500">
+                                </div>
+                                <div class="block">
+                                    <label for="y">Y position: </label><input id="y" type="range" name="y" value="150" min="-150" max="500">
+                                </div>
+                                <input id="pic" type="text" name="pic" style="display:none" value=""/>
+                                <input id="filter" type="text" name="filter" style="display:none;" value="">
+                                <a href="javascript:{}" id="login" class="myButton" onclick="document.getElementById(`myform`).submit(); return false;">SAVE</a>
+                            </form>
+                    </div>
                 </div>
+                <center><img id="picture" src="" style="display:none;width:30%;"></center>
+                <canvas style="display:none"></canvas><br>
+                <canvas id="save" style="display:none"></canvas><br>
             </div>
-            <center><img id="picture" src="" style="display:none"></center>
-            <canvas style="display:none"></canvas><br>
-            <canvas id="save" style="display:none"></canvas><br>
-        </div>
+        </center>
+
 
     </body>
     <footer>
@@ -183,9 +183,7 @@
         var data = canvas.toDataURL('image/jpg');
         photo.setAttribute('src', data);
         photo.style.display = "inline";
-        document.querySelector('#login').style.display = "inline";
-        document.querySelector('#send-container').style.display = "inline";
-        document.querySelector('#login').style.display = "inline";
+
         pic_input.value = data;
         canvas.getContext('2d').save();
     }
@@ -196,6 +194,9 @@
         canvas.getContext('2d').drawImage(willface, getValue(x), getValue(y));
         var data = canvas.toDataURL('image/jpg');
         filter.value = "filtre/willface.png";
+        document.querySelector('#login').style.display = "inline";
+        document.querySelector('#send-container').style.display = "inline";
+        document.querySelector('#login').style.display = "inline";
         photo.setAttribute('src', data);
         ev.preventDefault();
     }, false);
@@ -206,6 +207,9 @@
         canvas.getContext('2d').drawImage(ghost, getValue(x), getValue(y));
         var data = canvas.toDataURL('image/jpg');
         filter.value = "filtre/ghost.png";
+        document.querySelector('#login').style.display = "inline";
+        document.querySelector('#send-container').style.display = "inline";
+        document.querySelector('#login').style.display = "inline";
         photo.setAttribute('src', data);
         ev.preventDefault();
     }, false);
@@ -219,6 +223,9 @@
         canvas.getContext('2d').drawImage(glasses, getValue(x), getValue(y));
         var data = canvas.toDataURL('image/jpg');
         filter.value = "filtre/glasses.png";
+        document.querySelector('#login').style.display = "inline";
+        document.querySelector('#send-container').style.display = "inline";
+        document.querySelector('#login').style.display = "inline";
         photo.setAttribute('src', data);
         ev.preventDefault();
     }, false);
