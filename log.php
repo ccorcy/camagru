@@ -4,8 +4,7 @@ session_start();
 
 $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
 $select_users = $db->prepare('SELECT * FROM `user` WHERE `username` = :username');
-if (true)
-{
+
     $select_users->execute(array('username' => $_POST['username']));
     $result = $select_users->fetch(PDO::FETCH_ASSOC);
     if ($_POST['username'] == $result['username'] && hash("whirlpool", $_POST['password']) == $result['password'])
@@ -21,5 +20,4 @@ if (true)
     else {
         echo "Invalid username or password<br /><a href='restpwd.php'>Password lost ? Click on this link</a><br />";
     }
-}
  ?>

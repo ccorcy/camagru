@@ -5,7 +5,7 @@
         <title>Login / Camagru </title>
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/form.css">
-        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     </head>
     <body>
         <div class="login-container">

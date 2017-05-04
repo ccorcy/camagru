@@ -44,13 +44,14 @@
     <head>
         <meta charset="utf-8">
         <title>Manage Account / Camagru</title>
-        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
     </head>
     <header>
     <div class="header">
         <h1><a href="index.php">Camagru</a></h1>
         <a id="gal" href="gallery.php" style="margin-right: 15px;;">Gallery</a>
+        <a href='logout.php'>Logout</a>
     </div>
     </header>
     <body>

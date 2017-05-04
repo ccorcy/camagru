@@ -30,7 +30,7 @@ require("config/database.php");
         <meta charset="utf-8">
         <title>Gallery / Camagru</title>
         <link rel="stylesheet" href="css/style.css">
-        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     </head>
     <header>
     <div class="header">
@@ -88,7 +88,6 @@ require("config/database.php");
             plus[i].addEventListener('click', () => { sendVotePositive(plus[i]) }, false);
         }
         for (let i = 0; i < moins.length; i++) {
-            var truc = "bonjour";
             moins[i].addEventListener('click', () => { sendVoteNegative(moins[i]) } , false);
         }
     </script>

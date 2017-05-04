@@ -2,17 +2,44 @@
     include("config/database.php");
     session_start();
 
-    if ($_POST['comment'] !== ""
-         && $_SESSION['log_in'] !== "") {
+    if ($_SESSION['log_in'] == "") { header("Location:login.php"); }
+    if ($_POST['comment'] != ""
+         && $_SESSION['log_in'] != "") {
         $n_com = array('user' => $_SESSION['log_in'], 'commentaire' => htmlspecialchars($_POST['comment']));
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-        $select_coms = $db->prepare('SELECT `commentaires` FROM `img` WHERE `img`.`id` = :id');
-        $update_coms = $db->prepare('UPDATE `img` SET `commentaires` = :commentaires WHERE `img`.`id` = :id');
+        $select_coms = $db->prepare('SELECT * FROM `img` WHERE `img`.`id` = :id;');
+        $select_user = $db->prepare('SELECT * FROM `user` WHERE `user`.`username` = :username;');
+        $update_coms = $db->prepare('UPDATE `img` SET `commentaires` = :commentaires WHERE `img`.`id` = :id;');
         $select_coms->execute(array(':id' => $_GET['id']));
         $result = $select_coms->fetch(PDO::FETCH_ASSOC);
+        $username = $result['user'];
+
         $result = unserialize($result['commentaires']);
         $result[] = $n_com;
         $update_coms->execute(array(':id' => $_POST['id'], ':commentaires' => serialize($result)));
+
+        $select_user->execute(array(":username" => $username));
+        $mail = $select_user->fetch(PDO::FETCH_ASSOC);
+        $to = $mail['mail'];
+        $subject = 'Camagru | You received a comment';
+        $message = '
+            Someone comments your picture !
+        ------------------------
+        Username: '.$_SESSION['log_in'].'
+        Comment: '.$_POST['comment'].'
+        ------------------------';
+        $headers = 'From:noreply@camagru.com' . "\r\n";
+        mail($to, $subject, $message, $headers);
+        header("Location: login.php?success=1");
+    }
+
+    function display_pics(){
+        require("config/database.php");
+        $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $get_pics = $db->prepare('SELECT * FROM `img` WHERE `id` = :id');
+        $get_pics->execute(array(':id' => $_GET['id']));
+        $result = $get_pics->fetch(PDO::FETCH_ASSOC);
+        echo "<img class='gal-pics' style='width:30%; margin: 5px' src='".$result['picture']."'/>";
     }
 ?>
 <!DOCTYPE html>
@@ -21,16 +48,23 @@
         <meta charset="utf-8">
         <title>Commentaires / Camagru</title>
         <link rel="stylesheet" href="css/style.css">
-        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <link rel="stylesheet" href="css/form.css">
     </head>
     <header>
     <div class="header">
         <h1><a href="index.php">Camagru</a></h1>
         <a id="gal" href="gallery.php" style="margin-right: 15px;">Gallery</a>
+        <a href='logout.php'>Logout</a>
     </div>
     </header>
     <body>
+        <center>
+            <div style="width:60%;">
+                <?php display_pics(); ?>
+            </div>
+        </center>
+
         <div>
             <div id="comment" class="commentaires" style="float:left;">
 
@@ -63,19 +97,19 @@
                     xhr.open('GET', 'get_comms.php?id=' + <?php echo $_GET['id'] ?>, true);
                     xhr.onload = () => {
                         if (xhr.status === 200 && xhr.readyState === 4) {
-                            let com = JSON.parse(xhr.responseText);
-                            for (let i = 0; i < com.length; i++) {
-                                let e = document.createElement('div');
-                                let h2 = document.createElement('h2');
-                                let p = document.createElement('p');
-                                e.setAttribute('class', 'comments');
-                                h2.setAttribute('class', 'user-comments');
-                                h2.innerHTML = com[i].user;
-                                p.setAttribute('class', 'comm');
-                                p.innerHTML = com[i].commentaire;
-                                e.appendChild(h2);
-                                e.appendChild(p);
-                                comments.appendChild(e);
+                                let com = JSON.parse(xhr.responseText);
+                                for (let i = 0; i < com.length; i++) {
+                                    let e = document.createElement('div');
+                                    let h2 = document.createElement('h2');
+                                    let p = document.createElement('p');
+                                    e.setAttribute('class', 'comments');
+                                    h2.setAttribute('class', 'user-comments');
+                                    h2.innerHTML = com[i].user;
+                                    p.setAttribute('class', 'comm');
+                                    p.innerHTML = com[i].commentaire;
+                                    e.appendChild(h2);
+                                    e.appendChild(p);
+                                    comments.appendChild(e);
                             }
                         }
                     }
@@ -88,19 +122,23 @@
         xhr.open('GET', 'get_comms.php?id=' + <?php echo $_GET['id'] ?>, true);
         xhr.onload = () => {
             if (xhr.status === 200 && xhr.readyState === 4) {
-                let com = JSON.parse(xhr.responseText);
-                for (let i = 0; i < com.length; i++) {
-                    let e = document.createElement('div');
-                    let h2 = document.createElement('h2');
-                    let p = document.createElement('p');
-                    e.setAttribute('class', 'comments');
-                    h2.setAttribute('class', 'user-comments');
-                    h2.innerHTML = com[i].user;
-                    p.setAttribute('class', 'comm');
-                    p.innerHTML = com[i].commentaire;
-                    e.appendChild(h2);
-                    e.appendChild(p);
-                    comments.appendChild(e);
+                if (xhr.responseText === "Il n'y a aucun commentaire") {
+
+                } else {
+                    let com = JSON.parse(xhr.responseText);
+                    for (let i = 0; i < com.length; i++) {
+                        let e = document.createElement('div');
+                        let h2 = document.createElement('h2');
+                        let p = document.createElement('p');
+                        e.setAttribute('class', 'comments');
+                        h2.setAttribute('class', 'user-comments');
+                        h2.innerHTML = com[i].user;
+                        p.setAttribute('class', 'comm');
+                        p.innerHTML = com[i].commentaire;
+                        e.appendChild(h2);
+                        e.appendChild(p);
+                        comments.appendChild(e);
+                        }
                 }
             }
         }

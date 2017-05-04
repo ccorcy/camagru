@@ -6,8 +6,6 @@
         header("Location: login.php");
     }
 
-
-
     function is_log() {
         if ($_SESSION['log_in'] != "")
         {
@@ -24,7 +22,7 @@
         $result = $get_pics->fetchAll();
         foreach ($result as $row)
         {
-            echo "<img class='gal-pics' style='height:100px; width: 150px; margin: 5px' src='".$row['picture']."'/>";
+            echo "<img id='".$row['id']."' class='gal-pics' style='width:30%; margin: 5px' src='".$row['picture']."'/>";
         }
     }
 ?>
@@ -33,18 +31,19 @@
     <head>
         <meta charset="utf-8">
         <title>Camagru</title>
-        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/form.css">
     </head>
     <header>
-    <div class="header">
-        <h1><a href="index.php">Camagru</a></h1>
-        <a href="gallery.php" style="margin-right: 15px;">Gallery</a>
-        <a href='logout.php'>Logout</a>
-    </div>
-    </header><hr>
+
     <body>
+        <div class="header">
+            <h1><a href="index.php">Camagru</a></h1>
+            <a href="gallery.php" style="margin-right: 15px;">Gallery</a>
+            <a href='logout.php'>Logout</a>
+        </div>
+        </header><hr>
         <?php if ($_GET['success'] == 1) {
         echo "<p>
             Username correctly changed !
@@ -66,25 +65,27 @@
                 </div>
             </div>
             <div class="right-panel" style="overflow:auto;">
+                <p>Click on a picture to delete it</p>
                 <?php display_pics() ?>
             </div>
             <video style="width: 30%" autoplay></video>
         </div><br /><br />
         </center>
+    <hr>
         <center>
-            <div class="main-frame">
+            <div class="main-frame" style="width:100%">
                 <div class="left-panel">
                     <div class="block">
                         <h2>Filtre</h2>
                         <p>Click on the camera to take a picture !</p>
                         <div class="filter">
-                            <img id="glasses" src="filtre/glasses.png" style="width:200px;height:128px;" alt="">
-                            <img id="willface" src="filtre/willface.png"style="width:200px;height:128px;" alt="" />
-                            <img id="ghost" src="filtre/ghost.png" style="width:200px;height:128px;" alt="">
+                            <img id="glasses" src="filtre/glasses.png" style="width:30%" alt="">
+                            <img id="willface" src="filtre/willface.png"style="width:30%" alt="" />
+                            <img id="ghost" src="filtre/ghost.png" style="width:30%" alt="">
                         </div>
                     </div>
                 </div>
-                <div class="right-panel">
+                <div class="right-panel" style="text-align:left">
                     <div id="send-container">
                             <form id="myform" action="save_pictures.php" method="post">
                                 <div class="block">
@@ -131,6 +132,7 @@
     var     filtre = [glasses, willface, ghost];
     var     selected = -1;
 
+    let gal_pics = document.getElementsByClassName("gal-pics");
     document.querySelector('#login').style.display = "none";
     var xhr = new XMLHttpRequest();
 
@@ -196,8 +198,12 @@
         filter.value = "filtre/willface.png";
         document.querySelector('#login').style.display = "inline";
         document.querySelector('#send-container').style.display = "inline";
-        document.querySelector('#login').style.display = "inline";
+        if (photo.src != "")
+            document.querySelector('#send-container').style.display = "inline";
         photo.setAttribute('src', data);
+        willface.style = "box-shadow: 2px 2px 15px black; width: 30%";
+        ghost.style = "box-shadow: 0px black; width: 30%";
+        glasses.style = "box-shadow: 0px black; width: 30%";
         ev.preventDefault();
     }, false);
 
@@ -209,13 +215,17 @@
         filter.value = "filtre/ghost.png";
         document.querySelector('#login').style.display = "inline";
         document.querySelector('#send-container').style.display = "inline";
-        document.querySelector('#login').style.display = "inline";
+        if (photo.src != "")
+            document.querySelector('#send-container').style.display = "inline";
         photo.setAttribute('src', data);
+        ghost.style = "box-shadow: 2px 2px 15px black; width: 30%";
+        glasses.style = "box-shadow: 0px black; width: 30%";
+        willface.style = "box-shadow: 0px black; width: 30%";
         ev.preventDefault();
     }, false);
 
-    x.addEventListener('change', (ev) => { ev.preventDefault(); filtre[selected].click();},false);
-    y.addEventListener('change', (ev) => { ev.preventDefault(); filtre[selected].click();},false);
+    x.addEventListener('input', (ev) => { ev.preventDefault(); filtre[selected].click();},false);
+    y.addEventListener('input', (ev) => { ev.preventDefault(); filtre[selected].click();},false);
 
     glasses.addEventListener('click', (ev) => {
         selected = 0;
@@ -224,9 +234,12 @@
         var data = canvas.toDataURL('image/jpg');
         filter.value = "filtre/glasses.png";
         document.querySelector('#login').style.display = "inline";
-        document.querySelector('#send-container').style.display = "inline";
-        document.querySelector('#login').style.display = "inline";
+        if (photo.src != "")
+            document.querySelector('#send-container').style.display = "inline";
         photo.setAttribute('src', data);
+        glasses.style = "box-shadow: 2px 2px 15px black; width: 30%";
+        ghost.style = "box-shadow: 0px black; width: 30%";
+        willface.style = "box-shadow: 0px black; width: 30%";
         ev.preventDefault();
     }, false);
 
@@ -234,5 +247,22 @@
      takepicture();
     ev.preventDefault();
     }, false);
+
+    function deletePics(data) {
+        xhr.open('GET', 'delete_img.php?id=' + data.id, true);
+        xhr.send();
+        xhr.onload = () => {
+            if (xhr.status === 200 && xhr.readyState === 4) {
+                if (xhr.responseText === "OK") {
+                    data.style.display = "none";
+                }
+            }
+        }
+    }
+
+    for (let i = 0; i < gal_pics.length; i++) {
+        gal_pics[i].addEventListener('click', (ev) => { ev.preventDefault(); deletePics(gal_pics[i]); }, false);
+    }
+
     </script>
 </html>

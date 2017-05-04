@@ -8,10 +8,10 @@
         $accounts->execute(array(':user' => $_POST['username']));
         $res = $accounts->fetch(PDO::FETCH_ASSOC);
 
-        if ($res['username'] === "") {
+        if ($res['username'] != "") {
             echo "Username not available";
         }
-        else if ($_POST['username'] !== "" && $_POST['password'] !== "" && $_POST['password'] === $_POST['vpassword'] && $_POST['mail'] !== ""
+        else if ($_POST['username'] != "" && $_POST['password'] != "" && $_POST['password'] === $_POST['vpassword'] && $_POST['mail'] != ""
             && preg_match("/^([A-Za-z0-9]){4,15}$/", $_POST['username']) && preg_match("/^([A-Za-z0-9]){4,15}$/", $_POST['password']))
         {
             $password = hash("whirlpool", $_POST['password']);
@@ -27,7 +27,6 @@
 
             ------------------------
             Username: '.$_POST['username'].'
-            Password: '.$_POST['password'].'
             ------------------------
 
             Please click this link to activate your account:
@@ -47,16 +46,10 @@
     <head>
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/form.css">
-        <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
         <meta charset="utf-8">
         <title>Register / Camagru</title>
     </head>
-    <header>
-    <div class="header">
-        <h1><a href="index.php">Camagru</a></h1>
-        <a id="gal" href="gallery.php" style="margin-right: 15px;;">Gallery</a>
-    </div>
-    </header>
     <body>
         <div class="cont">
             <form class="form-container" action="register.php" method="post">
