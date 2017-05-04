@@ -39,7 +39,7 @@
         $get_pics = $db->prepare('SELECT * FROM `img` WHERE `id` = :id');
         $get_pics->execute(array(':id' => $_GET['id']));
         $result = $get_pics->fetch(PDO::FETCH_ASSOC);
-        echo "<img class='gal-pics' style='width:30%; margin: 5px' src='".$result['picture']."'/>";
+        echo "<img class='gal-pics' style='width:50%; margin: 5px' src='".$result['picture']."'/>";
     }
 ?>
 <!DOCTYPE html>
@@ -73,7 +73,7 @@
                 <form id="com" class="form-container" style="float:left;" action=<?php echo '"commentaires.php?id='.$_GET['id'].'";' ?> method="post">
                     <div class="form-title"><h2>Comment picture</h2></div>
                         <div class="form-title">Your comments</div>
-                        <textarea class="form-field" name="comment" rows="8" cols="80" required></textarea><br />
+                        <textarea id="textarea" class="form-field" name="comment" rows="8" cols="80" required></textarea><br />
                         <input style="display:none;" type="text" name="id" value=<?php echo '"'.$_GET['id'].'"' ?>>
                         <div class="submit-container">
                             <input class="submit-button" type="submit" name="submit" value="Submit comment" />
@@ -89,6 +89,7 @@
 
         com.addEventListener('submit', (e) => {
             e.preventDefault();
+            document.getElementById('textarea').value = "";
             let form = new FormData(com);
             xhr.open('POST', com.action, true);
             xhr.onload = () => {
