@@ -7,6 +7,7 @@
     else {
         header("Location: index.php?success=3");
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $db->query('USE `camagru`;');
         $pic = explode(',', $_POST['pic']);
         $filtre = imagecreatefrompng($_POST['filter']);
         $pictures = imagecreatefromstring(base64_decode($pic[1]));

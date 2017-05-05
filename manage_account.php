@@ -2,7 +2,7 @@
     include("config/database.php");
     session_start();
     $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-
+    $db->query('USE `camagru`;');
     $change_username = $db->prepare('UPDATE `user` SET `username` = :newusr WHERE `user`.`username` = :oldusr;');
     $change_password = $db->prepare('UPDATE `user` SET `password` = :newpsw WHERE `user`.`username` = :oldusr;');
     $change_usr_of_pics = $db->prepare('UPDATE `img` SET `user` = :newusr WHERE `img`.`user` = :oldusr;');

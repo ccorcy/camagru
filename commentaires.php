@@ -4,9 +4,11 @@
 
     if ($_SESSION['log_in'] == "") { header("Location:login.php"); }
     if ($_POST['comment'] != ""
-         && $_SESSION['log_in'] != "") {
-        $n_com = array('user' => $_SESSION['log_in'], 'commentaire' => htmlspecialchars($_POST['comment']));
+         && $_SESSION['log_in'] != "" && $_GET['id']) {
+
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $db->query('USE `camagru`;');
+
         $select_coms = $db->prepare('SELECT * FROM `img` WHERE `img`.`id` = :id;');
         $select_user = $db->prepare('SELECT * FROM `user` WHERE `user`.`username` = :username;');
         $update_coms = $db->prepare('UPDATE `img` SET `commentaires` = :commentaires WHERE `img`.`id` = :id;');
@@ -15,6 +17,7 @@
         $username = $result['user'];
 
         $result = unserialize($result['commentaires']);
+        $n_com = array('user' => $_SESSION['log_in'], 'commentaire' => htmlspecialchars($_POST['comment']));
         $result[] = $n_com;
         $update_coms->execute(array(':id' => $_POST['id'], ':commentaires' => serialize($result)));
 
@@ -33,9 +36,10 @@
         header("Location: login.php?success=1");
     }
 
-    function display_pics(){
+    function display_pics() {
         require("config/database.php");
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $db->query('USE `camagru`;');
         $get_pics = $db->prepare('SELECT * FROM `img` WHERE `id` = :id');
         $get_pics->execute(array(':id' => $_GET['id']));
         $result = $get_pics->fetch(PDO::FETCH_ASSOC);
@@ -67,7 +71,7 @@
 
         <div>
             <div id="comment" class="commentaires" style="float:left;">
-
+                <span></span>
             </div>
             <div class="add_com">
                 <form id="com" class="form-container" style="float:left;" action=<?php echo '"commentaires.php?id='.$_GET['id'].'";' ?> method="post">
@@ -89,12 +93,11 @@
 
         com.addEventListener('submit', (e) => {
             e.preventDefault();
-            document.getElementById('textarea').value = "";
             let form = new FormData(com);
             xhr.open('POST', com.action, true);
+            comments.innerHTML = "";
             xhr.onload = () => {
                 if (xhr.status === 200 && xhr.readyState === 4) {
-                    comments.innerHTML = "";
                     xhr.open('GET', 'get_comms.php?id=' + <?php echo $_GET['id'] ?>, true);
                     xhr.onload = () => {
                         if (xhr.status === 200 && xhr.readyState === 4) {
@@ -118,13 +121,14 @@
                 }
             }
             xhr.send(form);
+            document.getElementById('textarea').value = "";
         }, false);
 
         xhr.open('GET', 'get_comms.php?id=' + <?php echo $_GET['id'] ?>, true);
         xhr.onload = () => {
             if (xhr.status === 200 && xhr.readyState === 4) {
                 if (xhr.responseText === "Il n'y a aucun commentaire") {
-
+                    document.querySelector("span").innerHTML = xhr.responseText;
                 } else {
                     let com = JSON.parse(xhr.responseText);
                     for (let i = 0; i < com.length; i++) {

@@ -2,9 +2,9 @@
     include("database.php");
 
 
+    $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
     $db->query('CREATE DATABASE IF NOT EXISTS `camagru`;');
     $db->query('USE `camagru`;');
-    $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
     $create_user = $db->prepare('CREATE TABLE `user` (
     	`id` int AUTO_INCREMENT NOT NULL,
     	`username` varchar(256) NOT NULL,

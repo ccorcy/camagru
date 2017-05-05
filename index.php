@@ -17,6 +17,7 @@
     function display_pics(){
         require("config/database.php");
         $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $db->query('USE `camagru`;');
         $get_pics = $db->prepare('SELECT * FROM `img` WHERE `user` = :user ORDER BY `date` DESC;');
         $get_pics->execute(array('user' => $_SESSION['log_in']));
         $result = $get_pics->fetchAll();
@@ -249,6 +250,7 @@
     }, false);
 
     function deletePics(data) {
+        if (window.confirm("Are you sure that you want to delete this picture ?") === true) {
         xhr.open('GET', 'delete_img.php?id=' + data.id, true);
         xhr.send();
         xhr.onload = () => {
@@ -257,6 +259,7 @@
                     data.style.display = "none";
                 }
             }
+        }
         }
     }
 

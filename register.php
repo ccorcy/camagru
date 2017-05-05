@@ -1,6 +1,7 @@
 <?php
     include("config/database.php");
     $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    $db->query('USE `camagru`;');
     $insert_user = $db->prepare('INSERT INTO `user` (username, password, mail, confirmed) VALUES (:username, :password, :mail, :confirmed);');
     if ($_POST['Register'] == "Register")
     {

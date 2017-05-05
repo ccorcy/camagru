@@ -8,6 +8,7 @@
         header("Location: login.php");
     }else if ($JSON['action'] == "" || $JSON['id'] == "") {  } else {
     $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    $db->query('USE `camagru`;');
     $select_users = $db->prepare('SELECT `user_vote` FROM `img` WHERE `img`.`id` = :id');
     $modify_user_vote = $db->prepare('UPDATE `img` SET `user_vote` = :usr WHERE `img`.`id` = :id');
     $add_points = $db->prepare('UPDATE `img` SET `vote` = `vote` + 1  WHERE `img`.`id` = :id');

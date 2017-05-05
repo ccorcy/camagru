@@ -4,9 +4,11 @@ session_start();
 if ($_SESSION['log_in'] == "") header("Location: login.php");
 
 $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+$db->query('USE `camagru`;');
 function display_pics(){
 require("config/database.php");
     $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    $db->query('USE `camagru`;');
     $get_pics = $db->prepare('SELECT * FROM `img` ORDER BY `date` DESC;');
     $get_pics->execute();
     $result = $get_pics->fetchAll();
