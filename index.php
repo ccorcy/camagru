@@ -63,6 +63,7 @@
             <div class="left-panel">
                 <div class="block">
                     <?php is_log() ?>
+                    <input type="file" id="cust_pic" accept="image/*">
                 </div>
             </div>
             <div class="right-panel" style="overflow:auto;">
@@ -113,7 +114,7 @@
 
     </footer>
     <script type="text/javascript">
-    var     streaming = false,
+    let     streaming = false,
             video        = document.querySelector('video'),
             canvas       = document.querySelector('canvas'),
             save         = document.querySelector('#save'),
@@ -126,13 +127,14 @@
             width = 640,
             height = 0;
 
-    var     ghost = document.querySelector('#ghost'),
+    const     ghost = document.querySelector('#ghost'),
             willface = document.querySelector('#willface'),
             glasses = document.querySelector('#glasses');
 
-    var     filtre = [glasses, willface, ghost];
-    var     selected = -1;
+    let     filtre = [glasses, willface, ghost];
+    let     selected = -1;
 
+    let cust_pic = document.getElementById('cust_pic');
     let gal_pics = document.getElementsByClassName("gal-pics");
     document.querySelector('#login').style.display = "none";
     var xhr = new XMLHttpRequest();
@@ -157,9 +159,13 @@
      video.play();
     },
     function(err) {
-     console.log("An error occured! " + err);
+
     }
     );
+
+    cust_pic.addEventListener('change', (e) => {
+        let listFiles = this.files;
+    }, false);
 
     video.addEventListener('canplay', function(ev){
     if (!streaming) {
@@ -179,6 +185,7 @@
     }
 
     function takepicture() {
+        if (streaming === true) {
         canvas.width = width;
         canvas.height = height;
         canvas.getContext('2d').drawImage(video, 0, 0, width, height);
@@ -189,6 +196,7 @@
 
         pic_input.value = data;
         canvas.getContext('2d').save();
+        }
     }
 
     willface.addEventListener('click', (ev) => {

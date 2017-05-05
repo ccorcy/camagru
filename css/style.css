@@ -105,6 +105,8 @@ h2 {
     border-radius: 5px 5px 5px 5px;
 }
 
+#send-container label { font-size: 2vw; }
+
 .manage {
     border: 1px solid black;
 }
