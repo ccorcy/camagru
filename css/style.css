@@ -174,7 +174,8 @@ div.gallery {
     margin: 5px;
     border: 1px solid #ccc;
     float: left;
-    width: 180px;
+    width: 25%;
+    font-size: 1.2vw;
 }
 
 div.gallery:hover {
@@ -189,9 +190,6 @@ div.gallery img {
 div.desc {
     padding: 15px;
     text-align: center;
-}
-.gal-pics {
-
 }
 
 .login-container {
@@ -226,4 +224,12 @@ div.desc {
   .right-panel {
       max-height: 125px;
      }
+}
+
+.pagination {
+
+    left: 0;
+    height: 100px;
+    width: 100%;
+    overflow:hidden;
 }

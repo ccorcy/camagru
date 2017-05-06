@@ -2,7 +2,12 @@
     session_start();
     include("config/database.php");
 
-    $db = new PDO($DB_DSN, $DB_USERNAME, $DB_PASSWORD);
+    try {
+        $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        echo 'Connection failed: ' . $e->getMessage();
+    }
     $db->query('USE `camagru`;');
     $select_img = $db->prepare('SELECT * FROM `img` WHERE `img`.`id` = :id;');
     $delete_pics = $db->prepare('DELETE FROM `img` WHERE `img`.`id` = :id');

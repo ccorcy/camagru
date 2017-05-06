@@ -3,17 +3,22 @@
     session_start();
 
     if ($_SESSION['log_in'] == "") { header("Location:login.php"); }
+    try {
+        $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        echo 'Connection failed: ' . $e->getMessage();
+    }
+    $db->query('USE `camagru`;');
+    $select_coms = $db->prepare('SELECT * FROM `img` WHERE `img`.`id` = :id;');
+    $select_coms->execute(array(':id' => $_GET['id']));
+    $result = $select_coms->fetch(PDO::FETCH_ASSOC);
+    if ($result['picture'] == "") { header("Location: gallery.php"); }
+
     if ($_POST['comment'] != ""
          && $_SESSION['log_in'] != "" && $_GET['id']) {
-
-        $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
-        $db->query('USE `camagru`;');
-
-        $select_coms = $db->prepare('SELECT * FROM `img` WHERE `img`.`id` = :id;');
         $select_user = $db->prepare('SELECT * FROM `user` WHERE `user`.`username` = :username;');
-        $update_coms = $db->prepare('UPDATE `img` SET `commentaires` = :commentaires WHERE `img`.`id` = :id;');
-        $select_coms->execute(array(':id' => $_GET['id']));
-        $result = $select_coms->fetch(PDO::FETCH_ASSOC);
+        $update_coms = $db->prepare('UPDATE `img` SET `commentaires` = :commentaires WHERE `img`.`id` = :id;');;
         $username = $result['user'];
 
         $result = unserialize($result['commentaires']);
@@ -38,7 +43,12 @@
 
     function display_pics() {
         require("config/database.php");
-        $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        try {
+            $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            echo 'Connection failed: ' . $e->getMessage();
+        }
         $db->query('USE `camagru`;');
         $get_pics = $db->prepare('SELECT * FROM `img` WHERE `id` = :id');
         $get_pics->execute(array(':id' => $_GET['id']));

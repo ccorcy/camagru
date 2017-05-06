@@ -1,7 +1,12 @@
 <?php
     include("config/database.php");
     session_start();
-    $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+    try {
+        $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        echo 'Connection failed: ' . $e->getMessage();
+    }
     $db->query('USE `camagru`;');
     $change_username = $db->prepare('UPDATE `user` SET `username` = :newusr WHERE `user`.`username` = :oldusr;');
     $change_password = $db->prepare('UPDATE `user` SET `password` = :newpsw WHERE `user`.`username` = :oldusr;');

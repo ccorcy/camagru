@@ -16,7 +16,12 @@
 
     function display_pics(){
         require("config/database.php");
-        $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        try {
+            $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            echo 'Connection failed: ' . $e->getMessage();
+        }
         $db->query('USE `camagru`;');
         $get_pics = $db->prepare('SELECT * FROM `img` WHERE `user` = :user ORDER BY `date` DESC;');
         $get_pics->execute(array('user' => $_SESSION['log_in']));
@@ -164,7 +169,26 @@
     );
 
     cust_pic.addEventListener('change', (e) => {
-        let listFiles = this.files;
+        let files = cust_pic.files;
+        files = files[0];
+
+        let reader = new FileReader();
+        reader.onload = (files) => {
+            photo.file = files;
+            photo.src = files.target.result;
+            save.file = files;
+            save.src = files.target.result;
+
+            let base_image = new Image();
+            base_image.src = files.target.result;
+            base_image.onload = function(){
+                canvas.getContext('2d').drawImage(base_image, 0, 0, width, height);
+                save.getContext('2d').drawImage(base_image, 0, 0, width, height);
+                pic_input.value = canvas.toDataURL('image/jpg');
+            }
+            photo.style.display = "inline";
+        };
+        reader.readAsDataURL(files);
     }, false);
 
     video.addEventListener('canplay', function(ev){
@@ -274,6 +298,5 @@
     for (let i = 0; i < gal_pics.length; i++) {
         gal_pics[i].addEventListener('click', (ev) => { ev.preventDefault(); deletePics(gal_pics[i]); }, false);
     }
-
     </script>
 </html>

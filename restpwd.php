@@ -13,7 +13,12 @@
 
     if ($_POST['reset'] === "Reset" && $_POST['mail'] != "") {
         $newpwd = generateRandomString(10);
-        $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+        try {
+            $db = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            echo 'Connection failed: ' . $e->getMessage();
+        }
         $db->query('USE `camagru`;');
         $change_password = $db->prepare('UPDATE `user` SET `password` = :newpwd WHERE `user`.`mail` = :mail;');
         $change_password->execute(array(':newpwd' => hash('whirlpool', $newpwd), ':mail' => $_POST['mail']));
